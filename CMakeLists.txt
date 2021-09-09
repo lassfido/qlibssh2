@@ -2,10 +2,17 @@ cmake_minimum_required(VERSION 3.16)
 
 project(QLibssh2 LANGUAGES CXX)
 
-find_package(Qt5 REQUIRED
-    Core
+set(QT_MAIN_VERSION 6)
+find_package(Qt6 COMPONENTS Core
     Network
-)
+    QUIET)
+
+if (NOT Qt6_FOUND)
+    find_package(Qt5 5.15 COMPONENTS Core
+        Network
+        REQUIRED)
+    set(QT_MAIN_VERSION 5)
+endif()
 
 find_package(Libssh2 REQUIRED)
 
@@ -39,8 +46,8 @@ target_include_directories(qlibssh2
 
 target_link_libraries(qlibssh2
     PUBLIC
-        Qt5::Core
-        Qt5::Network
+        Qt::Core
+        Qt::Network
         Libssh2::libssh2
 )
 
